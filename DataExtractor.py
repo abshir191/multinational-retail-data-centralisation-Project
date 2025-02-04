@@ -3,6 +3,8 @@ from sqlalchemy import inspect
 import database_utils
 import tabula
 import requests
+import boto3
+from io import StringIO
 
 class DataExtractor:
     @staticmethod
@@ -26,21 +28,73 @@ class DataExtractor:
             return extracted_data
         else:
             raise ValueError("Error: extracted_data is neither a list nor a valid DataFrame.")
+  
     @staticmethod
     def list_number_of_stores(store_endpoint,headers):
         try:
             response = requests.get(store_endpoint, headers=headers)
             if response.status_code == 200:
                 stores_data = response.json()
+                print ("stores data:", stores_data)
                 return stores_data
             else:
                 return f"Error:{response.status_code}:{response.text}"
         except requests.exceptions.RequestException as e:
             print(f"Error:{e}")
 
+#extracts all the stores from the API saving them in a pandas DataFrame.
+    @staticmethod
+    def retrieve_stores_data(return_stores_endpoint, headers, num_stores):
+        extracted_stores = []
+
+        for stores_num in range(0, num_stores):
+            store_url = f"{return_stores_endpoint}/{stores_num}"
+            print(f"URL: {store_url}")
+            print(f"Headers: {headers}")
+            response = requests.get(store_url, headers=headers)
+            print("Headers being sent:", headers)
+
+            if response.status_code == 200:
+                print(f"calling API:", return_stores_endpoint)
+                store_data = response.json()  
+                extracted_stores.extend(store_data)
+            else:
+                print(response.text)
+                raise Exception( f"Error: {response.status_code}, {response.text}")
+
+        stores_df = pd.DataFrame(extracted_stores)
+        print(stores_df)
+        return stores_df
+
+    @staticmethod
+    def extract_from_s3(s3_key):
+        s3 = boto3.client('s3')
+        s3_bucket = s3_key.split('/')[2]
+        file_key = '/'.join(s3_key.split('/')[3:]) 
+
+        load_s3_data = s3.get_object(Bucket = s3_bucket, Key = file_key)
+        raw_s3_data = load_s3_data['Body'].read().decode('utf-8')
+
+        #check if file extension is csv
+        file_ext = file_key.split('.')[-1]
+        if file_ext == "csv":
+            extracted_s3_data = pd.read_csv(StringIO(raw_s3_data))
+            return extracted_s3_data
+        elif file_ext == "json":
+            extracted_s3_data = pd.read_json(StringIO(raw_s3_data))
+            return extracted_s3_data
+        else:
+            print(f"Error: {file_ext} is not recognised")
+            return None
+        #s3_key = "s3://data-handling-public/products.csv"
+        #dataframe = DataExtractor.extract_from_s3(s3_key)
+        #if dataframe is not None:
+        #    print(dataframe.head())
+        
+    
+
+
             
-
-
 
 
 utils = database_utils.DatabaseConnector()
@@ -53,6 +107,10 @@ print(read_rds)
 link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
 retrieve_pdf = DataExtractor.retrieve_pdf_data(link)
 #print(retrieve_pdf)
-headers = {'x-api-key':'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
+headers = {"x-api-key":"yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX"}
 store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/{store_number}'
 return_stores_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
+DataExtractor.list_number_of_stores(return_stores_endpoint, headers)
+num_stores = 451
+DataExtractor.retrieve_stores_data(return_stores_endpoint,headers,num_stores)
+s3_key = 'products.csv'

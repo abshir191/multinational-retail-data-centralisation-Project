@@ -30,8 +30,8 @@ class DatabaseConnector:
          with engine.connect() as connection:
             result = connection.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = \'public\';"))
             for table in result.fetchall():
-                #print(f"Loaded tables: {table}")
-                #print(table)
+                print(f"Loaded tables: {table}")
+                print(table)
                 return table
             
     def upload_to_db(self, df, table_name, sales_creds_file):
