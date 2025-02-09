@@ -41,11 +41,11 @@ class DataCleaning():
     @staticmethod 
     def clean_store_data(return_stores_endpoint, headers, num_stores):
        raw_store_data = extractor.retrieve_stores_data(return_stores_endpoint, headers, num_stores)
-       print(type(raw_store_data))
+       #print(type(raw_store_data))
        raw_store_data.replace("NULL", np.nan, inplace = True)
        raw_store_data.dropna(inplace = True)
-       raw_store_data["opening_date"] = pd.to_datetime(raw_store_data["opening_date"], errors="coerce")
-       raw_store_data.dropna(subset=["opening_date"], inplace=True)
+       raw_store_data["opening_dates"] = pd.to_datetime(raw_store_data["opening_dates"], errors="coerce")
+       raw_store_data.dropna(subset=["opening_dates"], inplace=True)
        raw_store_data["staff_number"] = raw_store_data["staff_number"].str.replace(r'[^0-9]', '', regex = True)
        raw_store_data.dropna(subset=["staff_number"], inplace=True)
        cleaned_store_data = raw_store_data
@@ -127,10 +127,10 @@ link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf
 cleaned_card_data = DataCleaning.clean_card_data(link)
 #clean store data
 headers = {"x-api-key":"yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX"}
-store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/{store_number}'
+store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details'
 return_stores_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
 num_stores = 451
-cleaned_store_data = DataCleaning.clean_store_data(return_stores_endpoint, headers, num_stores)
+cleaned_store_data = DataCleaning.clean_store_data(store_endpoint, headers, num_stores)
 #clean
 s3_key = 's3://data-handling-public/products.csv'
 extracted_s3_data = DataExtractor.DataExtractor.extract_from_s3(s3_key)

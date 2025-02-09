@@ -5,6 +5,7 @@ import tabula
 import requests
 import boto3
 from io import StringIO
+import time
 
 class DataExtractor:
     @staticmethod
@@ -35,7 +36,7 @@ class DataExtractor:
             response = requests.get(store_endpoint, headers=headers)
             if response.status_code == 200:
                 stores_data = response.json()
-                print ("stores data:", stores_data)
+                #print ("stores data:", stores_data)
                 return stores_data
             else:
                 return f"Error:{response.status_code}:{response.text}"
@@ -48,14 +49,12 @@ class DataExtractor:
         extracted_stores = []
 
         for stores_num in range(0, num_stores):
-            store_url = f"{return_stores_endpoint}/{stores_num}"
-            print(f"URL: {store_url}")
-            print(f"Headers: {headers}")
-            response = requests.get(store_url, headers=headers)
-            print("Headers being sent:", headers)
+            store_url = f"{return_stores_endpoint}/{stores_num}"     
+            start_time = time.time()    
+            response = requests.get(store_url, headers=headers, timeout=5)
+            end_time = time.time()
 
             if response.status_code == 200:
-                print(f"calling API:", return_stores_endpoint)
                 store_data = response.json()  
                 extracted_stores.extend(store_data)
             else:
@@ -63,14 +62,14 @@ class DataExtractor:
                 raise Exception( f"Error: {response.status_code}, {response.text}")
 
         stores_df = pd.DataFrame(extracted_stores)
-        print(stores_df)
         return stores_df
+        
 
     @staticmethod
     def extract_from_s3(s3_key):
         s3 = boto3.client('s3')
         s3_bucket = s3_key.split('/')[2]
-        file_key = '/'.join(s3_key.split('/')[3:]) 
+        file_key = '/'.join(s3_key.split('/')[3:])
 
         load_s3_data = s3.get_object(Bucket = s3_bucket, Key = file_key)
         raw_s3_data = load_s3_data['Body'].read().decode('utf-8')
@@ -103,14 +102,14 @@ engine = utils.init_db_engine("C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multin
 get_db_tables = DataExtractor.list_db_tables(engine)
 table_name = 'legacy_users'
 read_rds = DataExtractor.read_rds_table(engine, table_name)
-print(read_rds)
+#print(read_rds)
 link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
 retrieve_pdf = DataExtractor.retrieve_pdf_data(link)
 #print(retrieve_pdf)
 headers = {"x-api-key":"yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX"}
-store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/{store_number}'
+store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details'
 return_stores_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
 DataExtractor.list_number_of_stores(return_stores_endpoint, headers)
 num_stores = 451
-DataExtractor.retrieve_stores_data(return_stores_endpoint,headers,num_stores)
+DataExtractor.retrieve_stores_data(store_endpoint,headers,num_stores)
 s3_key = 'products.csv'
