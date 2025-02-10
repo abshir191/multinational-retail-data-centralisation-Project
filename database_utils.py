@@ -31,7 +31,6 @@ class DatabaseConnector:
             result = connection.execute(text("SELECT tablename FROM pg_tables WHERE schemaname = \'public\';"))
             for table in result.fetchall():
                 print(f"Loaded tables: {table}")
-                print(table)
                 return table
             
     def upload_to_db(self, df, table_name, sales_creds_file):
@@ -59,5 +58,6 @@ if __name__ == "__main__":
     card_data_to_clean = extractor.retrieve_pdf_data(link)
     cleaned_user_data = data_cleaning.DataCleaning.clean_card_data(user_data_to_clean)
     cleaned_card_data = data_cleaning.DataCleaning.clean_card_data(card_data_to_clean)
-    db_connector.clean_and_upload(engine, 'legacy_users', 'link', "C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\sales_data_db.yaml")
+    db_connector.upload_to_db(engine, 'legacy_users', 'link', "C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\sales_data_db.yaml")
     db_connector.list_db_tables(engine)
+ 
