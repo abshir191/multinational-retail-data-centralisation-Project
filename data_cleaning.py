@@ -41,11 +41,23 @@ class DataCleaning():
     @staticmethod 
     def clean_store_data(return_stores_endpoint, headers, num_stores):
        raw_store_data = extractor.retrieve_stores_data(return_stores_endpoint, headers, num_stores)
+       print("Raw Store Data (First 5 Rows)")
+       print(raw_store_data)
+       print("Column Names")
+       print(list(raw_store_data.columns))
+       #check
+       if raw_store_data.shape[1] == 1: 
+        print("Error, only one column, check data")
+
+       if ["opening_date"] not in raw_store_data.columns.to_list():
+        raise ValueError("Column 'opening_date' is missing")  
+       else:
+          print("opening_date coulmn found")
        #print(type(raw_store_data))
        raw_store_data.replace("NULL", np.nan, inplace = True)
        raw_store_data.dropna(inplace = True)
-       raw_store_data["opening_dates"] = pd.to_datetime(raw_store_data["opening_dates"], errors="coerce")
-       raw_store_data.dropna(subset=["opening_dates"], inplace=True)
+       raw_store_data["opening_date"] = pd.to_datetime(raw_store_data["opening_date"], errors="coerce")
+       raw_store_data.dropna(subset=["opening_date"], inplace=True)
        raw_store_data["staff_number"] = raw_store_data["staff_number"].str.replace(r'[^0-9]', '', regex = True)
        raw_store_data.dropna(subset=["staff_number"], inplace=True)
        cleaned_store_data = raw_store_data
@@ -144,10 +156,11 @@ class DataCleaning():
 
 
 
+extractor = DataExtractor.DataExtractor()
 
-if __name__ == "main":
+if __name__ == "__main__":
   engine = database_utils.engine
-  extractor = DataExtractor.DataExtractor()
+  #extractor = DataExtractor.DataExtractor()
   db_connector = database_utils.DatabaseConnector()
 
   #f"{DATABASE_TYPE}+{DBAPI}://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"

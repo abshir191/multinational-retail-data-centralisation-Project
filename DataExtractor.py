@@ -17,8 +17,7 @@ class DataExtractor:
     @staticmethod    
     def read_rds_table(engine, table_name): 
         query = (f"SELECT * FROM {table_name}")
-        df = pd.read_sql_query(query,engine)
-        print(df)     
+        df = pd.read_sql_query(query,engine)     
         return df
     @staticmethod
     def retrieve_pdf_data(link):
@@ -99,7 +98,7 @@ class DataExtractor:
 
             
 
-if __name__ == "main":
+if __name__ == "__main__":
     utils = database_utils.DatabaseConnector()
     engine = utils.init_db_engine("C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\db_creds.yaml")
     #get_db_tables = utils.list_db_tables this was a mistake as i called it using an instance which isn't nessecarry beacuse i used a static method, meaning i can jus call it directly. done below:
