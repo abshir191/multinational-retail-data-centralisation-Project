@@ -34,13 +34,12 @@ class DataCleaning():
         card_data_to_clean["date_payment_confirmed"] = pd.to_datetime(card_data_to_clean["date_payment_confirmed"], errors="coerce")
         card_data_to_clean.dropna(subset=["date_payment_confirmed"], inplace=True)
         cleaned_card_data = card_data_to_clean
-        #card_data_to_clean.to_csv("raw_card_data.csv", index=False)
-        #print("CSV file saved!")
         return cleaned_card_data
     
     @staticmethod 
     def clean_store_data(return_stores_endpoint, headers, num_stores):
        raw_store_data = extractor.retrieve_stores_data(return_stores_endpoint, headers, num_stores)
+       print(raw_store_data.columns)
        print("Raw Store Data (First 5 Rows)")
        print(raw_store_data)
        print("Column Names")
@@ -49,7 +48,7 @@ class DataCleaning():
        if raw_store_data.shape[1] == 1: 
         print("Error, only one column, check data")
 
-       if ["opening_date"] not in raw_store_data.columns.to_list():
+       if "opening_date" not in raw_store_data.columns.to_list():
         raise ValueError("Column 'opening_date' is missing")  
        else:
           print("opening_date coulmn found")

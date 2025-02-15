@@ -33,7 +33,7 @@ class DatabaseConnector:
                 print(f"Loaded tables: {table}")
                 return table
             
-    def upload_to_db(self, df, table_name, sales_creds_file):
+    def upload_to_db(self, df, table_name, sales_creds_file ):
         creds = self.read_sales_db_creds(sales_creds_file)
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
@@ -53,11 +53,10 @@ if __name__ == "__main__":
     from DataExtractor import DataExtractor
     extractor = DataExtractor()
     link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
+    sales_creds_file = "C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\sales_data_db.yaml"
     import data_cleaning
-    user_data_to_clean = extractor.read_rds_table(engine,'legacy_users')
-    card_data_to_clean = extractor.retrieve_pdf_data(link)
-    cleaned_user_data = data_cleaning.DataCleaning.clean_card_data(user_data_to_clean)
-    cleaned_card_data = data_cleaning.DataCleaning.clean_card_data(card_data_to_clean)
-    db_connector.upload_to_db(engine, 'legacy_users', 'link', "C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\sales_data_db.yaml")
+    cleaned_user_data = data_cleaning.DataCleaning.clean_user_data(engine)
+    cleaned_card_data = data_cleaning.DataCleaning.clean_card_data(link)
+    db_connector.upload_to_db(cleaned_user_data,'dim_users' , sales_creds_file)
     db_connector.list_db_tables(engine)
  

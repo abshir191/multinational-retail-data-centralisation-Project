@@ -16,12 +16,13 @@ class DataExtractor:
         return tables
     @staticmethod    
     def read_rds_table(engine, table_name): 
-        query = (f"SELECT * FROM {table_name}")
+        query = f"SELECT * FROM {table_name}"
         df = pd.read_sql_query(query,engine)     
         return df
     @staticmethod
     def retrieve_pdf_data(link):
-        extracted_data = tabula.read_pdf(link, pages = 'all')
+        print(type(link))
+        extracted_data = tabula.read_pdf(link,pages='all',multiple_tables=True)
         # Combine all tables into a single DataFrame to check if extracted_data is a list
         if isinstance(extracted_data, list):
             return pd.concat(extracted_data, ignore_index=True)
@@ -101,14 +102,12 @@ class DataExtractor:
 if __name__ == "__main__":
     utils = database_utils.DatabaseConnector()
     engine = utils.init_db_engine("C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\db_creds.yaml")
-    #get_db_tables = utils.list_db_tables this was a mistake as i called it using an instance which isn't nessecarry beacuse i used a static method, meaning i can jus call it directly. done below:
+    #get_db_tables = utils.list_db_tables this was a mistake as i called it using an instance which isn't necessarry beacuse i used a static method, meaning i can jus call it directly. done below:
     get_db_tables = DataExtractor.list_db_tables(engine)
     table_name = 'legacy_users'
     read_rds = DataExtractor.read_rds_table(engine, table_name)
-    #print(read_rds)
-    link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
-    retrieve_pdf = DataExtractor.retrieve_pdf_data(link)
-    #print(retrieve_pdf)
+    #link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
+    retrieve_pdf = DataExtractor.retrieve_pdf_data('https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf')
     headers = {"x-api-key":"yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX"}
     store_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details'
     return_stores_endpoint = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
