@@ -46,17 +46,6 @@ class DatabaseConnector:
         upload_engine = create_engine(upload_string)
         df.to_sql(table_name,upload_engine,if_exists='replace',index=False)
 
-db_connector = DatabaseConnector()
-engine = db_connector.init_db_engine("C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\db_creds.yaml")
 
-if __name__ == "__main__":
-    from DataExtractor import DataExtractor
-    extractor = DataExtractor()
-    link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
-    sales_creds_file = "C:\\Users\\abshi\\OneDrive\\Documents\\IT\\Multination Retail Data Centralisation Project\\sales_data_db.yaml"
-    import data_cleaning
-    cleaned_user_data = data_cleaning.DataCleaning.clean_user_data(engine)
-    cleaned_card_data = data_cleaning.DataCleaning.clean_card_data(link)
-    db_connector.upload_to_db(cleaned_user_data,'dim_users' , sales_creds_file)
-    db_connector.list_db_tables(engine)
- 
+   
+    
