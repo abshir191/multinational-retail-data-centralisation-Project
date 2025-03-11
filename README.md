@@ -38,9 +38,9 @@ Example:pip install yaml
 
 ## Usage
 ### Python Classes used in this project:
-DataExtractor: found in DataExtractor.py
- DataCleaning: found in data_cleaning.py
-  DatabaseConnector: found in database_utils.py
+DataExtractor: found in DataExtractor.py, 
+ DataCleaning: found in data_cleaning.py, 
+ DatabaseConnector: found in database_utils.py
 #
 - Run the main.py script to begin data centralisation
 - To Extract Data, we used the DataExtractor in order to pull Data from required sources.
