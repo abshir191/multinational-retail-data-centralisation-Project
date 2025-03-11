@@ -37,7 +37,7 @@ Example:pip install yaml
 
 
 ## Usage
-# There are 3 Python Classes used in this project:
+### Python Classes used in this project:
 - DataExtractor: found in DataExtractor.py
 - DataCleaning: found in data_cleaning.py
 - DatabaseConnector: found in database_utils.py
