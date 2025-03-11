@@ -57,20 +57,28 @@ DataExtractor: found in DataExtractor.py,
 
 ## File Structure
 Multination-Retail-Data-Centralisation-Project/
+
 ├── main.py
 │   └── Run this script to create a local database from extracted data.
+
 ├── DataExtractor.py
 │   └── Contains the DataExtractor class and methods used to extract data from required sources.
+
 ├── data_cleaning.py
 │   └── Defines the DataCleaning class and methods to clean and process data.
+
 ├── database_utils.py
 │   └── Implements the DatabaseConnector class and methods for interacting with the database.
+
 ├── Milestone3_Database_schema.sql
 │   └── SQL queries used to develop the database schema.
+
 ├── Milestone4_Business_Data.sql
 │   └── SQL queries used to retrieve up-to-date metrics from data.
+
 ├── README.md
 │   └── Provides an overview of the project and its contents.
+
 └── .gitignore
     └── Specifies files and directories to be ignored by Git.
 
