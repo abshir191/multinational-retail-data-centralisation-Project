@@ -16,7 +16,8 @@ One of the goals of this project was to produce a system that will store the com
 
 2- Navigate to project directory. cd Multination Retail Data Centralisation Project
 
-3- Install required Python packages and dependencies.Use pip install command to install.Example:pip install yaml
+3- Install required Python packages and dependencies.Use pip install command to install.
+Example:pip install yaml
 
 - Python 3
 - Pandas
@@ -32,10 +33,7 @@ One of the goals of this project was to produce a system that will store the com
 
 5- record database credentials, do so by right clicking on your server and then select properties to view credentials
 
-
-5- Create YAML files: db_creds.yaml and sales_db_creds.yaml and enter database credentials. 
-# Example:
-![alt text](image.png)
+6- Create YAML files: db_creds.yaml and sales_db_creds.yaml and enter database credentials. 
 
 
 ## Usage
