@@ -56,31 +56,16 @@ DataExtractor: found in DataExtractor.py,
 - Managing cloud and local database interactions using SQLAlchemy.
 
 ## File Structure
-Multination-Retail-Data-Centralisation-Project/
-
-├── main.py
-│   └── Run this script to create a local database from extracted data.
-
-├── DataExtractor.py
-│   └── Contains the DataExtractor class and methods used to extract data from required sources.
-
-├── data_cleaning.py
-│   └── Defines the DataCleaning class and methods to clean and process data.
-
-├── database_utils.py
-│   └── Implements the DatabaseConnector class and methods for interacting with the database.
-
-├── Milestone3_Database_schema.sql
-│   └── SQL queries used to develop the database schema.
-
-├── Milestone4_Business_Data.sql
-│   └── SQL queries used to retrieve up-to-date metrics from data.
-
-├── README.md
-│   └── Provides an overview of the project and its contents.
-
-└── .gitignore
-    └── Specifies files and directories to be ignored by Git.
+    Multination-Retail-Data-Centralisation-Project/
+├── LICENSE                         # License governing the project's use and distribution
+├── README.md                       # Provides an overview of the project and its contents.
+├── main.py                         # Main script to initialize the local database from extracted data
+├── DataExtractor.py                # Contains DataExtractor class and methods for data extraction
+├── data_cleaning.py                # Defines DataCleaning class and methods for data processing
+├── database_utils.py               # Implements DatabaseConnector class for database interactions
+├── Milestone3_Database_schema.sql  # SQL script for setting up the database schema
+├── Milestone4_Business_Data.sql    # SQL script to retrieve up-to-date business metrics
+└── .gitignore                      # Specifies files and directories to be ignored by Git.
 
 
 ## License
