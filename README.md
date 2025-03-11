@@ -13,8 +13,11 @@ One of the goals of this project was to produce a system that will store the com
 
 ## Installation
 1- Clone repository. git clone https://github.com/Abshir099/multinational-retail-data-centralisation878.git
+
 2- Navigate to project directory. cd Multination Retail Data Centralisation Project
+
 3- Install required Python packages and dependencies.Use pip install command to install.Example:pip install yaml
+
 - Python 3
 - Pandas
 - yaml
@@ -24,15 +27,22 @@ One of the goals of this project was to produce a system that will store the com
 - requests
 - psycopg2
 - tabula
-4- Create YAML files: db_creds.yaml and sales_db_creds.yaml and enter database credentials. 
+
+4- install PostgreSQL and create a server and a Database called "sales_data"
+
+5- record database credentials, do so by right clicking on your server and then select properties to view credentials
+
+
+5- Create YAML files: db_creds.yaml and sales_db_creds.yaml and enter database credentials. 
 # Example:
 ![alt text](image.png)
 
+
 ## Usage
-There are 3 Python Classes used in this project:
-DataExtractor: found in DataExtractor.py
-DataCleaning: found in data_cleaning.py
-DatabaseConnector: found in database_utils.py
+# There are 3 Python Classes used in this project:
+- DataExtractor: found in DataExtractor.py
+- DataCleaning: found in data_cleaning.py
+- DatabaseConnector: found in database_utils.py
 
 - Run the main.py script to begin data centralisation
 - To Extract Data, we used the DataExtractor in order to pull Data from required sources.
