@@ -69,4 +69,4 @@ DataExtractor: found in DataExtractor.py,
 
 
 ## License
-See LICENSE for more information
+See LICENSE for more information.
